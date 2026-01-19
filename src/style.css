@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@theme {
+  --color-terminal-green: #00ff41;
+  --color-terminal-bg: #0d0d0d;
+  --color-terminal-red: #ff0040;
+  --color-terminal-yellow: #ffcc00;
+  --color-terminal-blue: #00d4ff;
+  --font-mono:
+    ui-monospace, "Fira Code", "Cascadia Code", "JetBrains Mono", Menlo, Monaco,
+    "Courier New", monospace;
+}
+
+body {
+  background-color: var(--color-terminal-bg);
+  color: var(--color-terminal-green);
+  font-family: var(--font-mono);
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  min-height: 100vh;
+}

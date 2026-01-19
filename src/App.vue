@@ -1,30 +1,13 @@
-<script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="bg-terminal-bg text-terminal-green">
+    <h1 class="text-terminal-blue">Mockup terminal</h1>
+    <p class="text-terminal-red">Test: CRITICAL ALERT</p>
+    <p class="text-terminal-yellow">Test: WARNING</p>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+
+  <code class="font-mono">Test: 192.168.1.100</code>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>
