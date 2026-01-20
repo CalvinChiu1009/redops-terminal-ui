@@ -3,9 +3,10 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useAttackStore } from "@/stores/attackStore";
 import { useMockStream } from "@/composables/useMockStream";
+import StatCard from "@/components/dashboard/StatCard.vue";
 
 const attackStore = useAttackStore();
-const { logs, totalLogs, criticalCount, blockedCount } =
+const { logs, totalLogs, criticalCount, blockedCount, successCount } =
   storeToRefs(attackStore);
 
 const { startStream, stopStream } = useMockStream();
@@ -24,26 +25,30 @@ onMounted(() => {
         RedOps Command Center - Phase 1 Test
       </h1>
 
-      <!-- 統計卡片 -->
-      <div class="grid grid-cols-3 gap-4 mb-8">
-        <div class="bg-terminal-bg border border-terminal-green p-4 rounded">
-          <div class="text-terminal-yellow text-sm">Total Logs</div>
-          <div class="text-3xl font-bold">{{ totalLogs }}</div>
-        </div>
+      <!-- 統計卡片 - 改為 4 欄佈局 -->
+      <div class="grid grid-cols-4 gap-4 mb-8">
+        <StatCard title="Total Logs" :value="totalLogs" color="green" />
 
-        <div class="bg-terminal-bg border border-terminal-red p-4 rounded">
-          <div class="text-terminal-yellow text-sm">Critical Threats</div>
-          <div class="text-3xl font-bold text-terminal-red">
-            {{ criticalCount }}
-          </div>
-        </div>
+        <StatCard
+          title="Critical Threats"
+          :value="criticalCount"
+          color="red"
+          icon="⚠️"
+        />
 
-        <div class="bg-terminal-bg border border-terminal-blue p-4 rounded">
-          <div class="text-terminal-yellow text-sm">Blocked Attacks</div>
-          <div class="text-3xl font-bold text-terminal-blue">
-            {{ blockedCount }}
-          </div>
-        </div>
+        <StatCard
+          title="Successful Attacks"
+          :value="successCount"
+          color="red"
+          icon="🚨"
+        />
+
+        <StatCard
+          title="Blocked Attacks"
+          :value="blockedCount"
+          color="blue"
+          icon="🛡️"
+        />
       </div>
 
       <!-- 控制 -->
