@@ -118,10 +118,12 @@ onMounted(() => {
       <LogControls />
 
       <!-- 日誌終端 -->
+      <!-- 日誌終端 -->
       <LogTerminal
         :logs="filteredLogs.slice(-10).reverse()"
         :filterActive="filterActive"
         :filterLabel="filterLabel"
+        :totalMatchCount="filteredLogs.length"
       />
     </div>
     <!-- </div> -->

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import type { AttackLog } from "@/types/attack";
 import LogItem from "./LogItem.vue";
 
@@ -7,11 +7,13 @@ interface Props {
   logs: AttackLog[];
   filterActive?: boolean;
   filterLabel?: string;
+  totalMatchCount?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   filterActive: false,
   filterLabel: "",
+  totalMatchCount: 0,
 });
 
 // 計算顯示的日誌數量
@@ -24,7 +26,13 @@ const displayCount = computed(() => props.logs.length);
     <h2 class="text-xl font-bold mb-4 flex items-center justify-between">
       <span>Latest Logs (Last 10)</span>
       <span v-if="filterActive" class="text-sm text-terminal-yellow">
-        - {{ filterLabel }}: {{ displayCount }} 筆
+        - {{ filterLabel }}: {{ totalMatchCount || displayCount }} 筆
+        <span
+          v-if="totalMatchCount && totalMatchCount > displayCount"
+          class="text-xs opacity-70"
+        >
+          (最新 {{ displayCount }})
+        </span>
       </span>
     </h2>
 
