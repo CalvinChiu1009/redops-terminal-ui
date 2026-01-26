@@ -2,10 +2,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import { useUISettings } from "@/composables/useUISettings";
 
 const route = useRoute();
+const { showParticles, toggleParticles } = useUISettings();
 
 const navItems = [
+  // ... existing navItems definition ...
   {
     name: "dashboard",
     path: "/",
@@ -29,7 +32,7 @@ const navItems = [
 
 <template>
   <aside
-    class="hidden md:flex flex-col w-64 border-r border-terminal-green/30 bg-black/20 p-4 h-full overflow-y-auto"
+    class="hidden md:flex flex-col w-64 border-r border-terminal-green/30 bg-black/20 p-4 h-full overflow-y-auto z-20"
   >
     <!-- Logo 區域 -->
     <div class="mb-8 p-2 border-b border-terminal-green/30 pb-4">
@@ -41,7 +44,7 @@ const navItems = [
       </h1>
     </div>
 
-    <!-- 導航選單 (先放假資料) -->
+    <!-- 導航選單 -->
     <nav class="space-y-2 flex-1">
       <RouterLink
         v-for="item in navItems"
@@ -49,7 +52,6 @@ const navItems = [
         :to="item.path"
         class="block p-3 border-l-2 transition-all cursor-pointer group"
         :class="[
-          // 使用 route.path === item.path 判斷是否啟用 (或使用 RouterLink 的 active-class)
           route.path === item.path
             ? 'bg-terminal-green/10 text-terminal-green border-terminal-green'
             : 'text-terminal-green/60 border-transparent hover:text-terminal-green hover:bg-terminal-green/10 hover:border-terminal-green/50',
@@ -59,14 +61,31 @@ const navItems = [
           <span class="text-lg group-hover:scale-110 transition-transform">{{
             item.icon
           }}</span>
-          <span class="font-medium">{{ item.name }}</span>
+          <span class="font-medium">{{ item.label }}</span>
         </div>
       </RouterLink>
     </nav>
 
+    <!-- 設定區塊 (粒子特效開關) -->
+    <div class="mt-4 px-2 pb-2">
+      <button
+        @click="toggleParticles"
+        class="flex items-center justify-between w-full p-2 text-xs border border-terminal-green/30 text-terminal-green/70 hover:bg-terminal-green/10 transition-colors"
+      >
+        <span>Particle FX</span>
+        <span
+          :class="
+            showParticles ? 'text-terminal-green font-bold' : 'text-gray-500'
+          "
+        >
+          {{ showParticles ? "[ON]" : "[OFF]" }}
+        </span>
+      </button>
+    </div>
+
     <!-- 底部版本號 -->
     <div
-      class="mt-auto pt-4 border-t border-terminal-green/30 text-xs text-center opacity-50"
+      class="pt-2 border-t border-terminal-green/30 text-xs text-center opacity-50"
     >
       v0.5.0 Alpha
     </div>
