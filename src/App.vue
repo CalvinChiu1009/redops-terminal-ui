@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import { useAttackStore } from "@/stores/attackStore";
 import { useMockStream } from "@/composables/useMockStream";
 import Header from "@/components/layout/Header.vue";
+import Filter from "@/components/dashboard/Filter.vue";
 import StatsGrid from "@/components/dashboard/StatsGrid.vue";
 import LogTerminal from "@/components/logs/LogTerminal.vue";
 import LogControls from "@/components/logs/LogControls.vue";
@@ -104,7 +105,12 @@ onMounted(() => {
       />
 
       <!-- 篩選提示 -->
-      <div
+      <Filter
+        :filterLevel="filterLevel"
+        :filterStatus="filterStatus"
+        @clearFilters="clearFilters"
+      />
+      <!-- <div
         v-if="filterLevel || filterStatus"
         class="my-4 p-3 bg-terminal-yellow/10 border border-terminal-yellow rounded"
       >
@@ -119,7 +125,7 @@ onMounted(() => {
             清除篩選
           </button>
         </span>
-      </div>
+      </div> -->
 
       <!-- 控制按鈕 -->
       <LogControls />
