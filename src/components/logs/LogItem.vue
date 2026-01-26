@@ -17,17 +17,16 @@ const formattedTime = computed(() => {
 
 // 根據 level 決定樣式
 const levelClasses = computed(() => {
-  const baseClasses =
-    "p-2 border-l-4 transition-all duration-200 hover:bg-opacity-20";
+  const baseClasses = "p-2 border-l-4 transition-all duration-200";
 
   switch (props.log.level) {
     case "CRITICAL":
-      return `${baseClasses} border-terminal-red bg-terminal-red/10`;
+      return `${baseClasses} border-terminal-red bg-terminal-red/10 hover:bg-terminal-red/30`;
     case "WARNING":
-      return `${baseClasses} border-terminal-yellow bg-terminal-yellow/10`;
+      return `${baseClasses} border-terminal-yellow bg-terminal-yellow/10 hover:bg-terminal-yellow/30`;
     case "INFO":
     default:
-      return `${baseClasses} border-terminal-green bg-terminal-green/10`;
+      return `${baseClasses} border-terminal-green bg-terminal-green/10 hover:bg-terminal-green/30`;
   }
 });
 

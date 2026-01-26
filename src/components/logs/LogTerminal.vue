@@ -6,10 +6,12 @@ import LogItem from "./LogItem.vue";
 interface Props {
   logs: AttackLog[];
   filterActive?: boolean;
+  filterLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   filterActive: false,
+  filterLabel: "",
 });
 
 // 計算顯示的日誌數量
@@ -18,11 +20,11 @@ const displayCount = computed(() => props.logs.length);
 
 <template>
   <div class="border border-terminal-green rounded p-4">
-    <!-- 標題！ -->
+    <!-- 標題 -->
     <h2 class="text-xl font-bold mb-4 flex items-center justify-between">
       <span>Latest Logs (Last 10)</span>
       <span v-if="filterActive" class="text-sm text-terminal-yellow">
-        - 顯示 {{ displayCount }} 筆篩選結果
+        - {{ filterLabel }}: {{ displayCount }} 筆
       </span>
     </h2>
 

@@ -3,7 +3,6 @@ import { onMounted, ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useAttackStore } from "@/stores/attackStore";
 import { useMockStream } from "@/composables/useMockStream";
-// import StatCard from "@/components/dashboard/StatCard.vue";
 import StatsGrid from "@/components/dashboard/StatsGrid.vue";
 import LogTerminal from "@/components/logs/LogTerminal.vue";
 import LogControls from "@/components/logs/LogControls.vue";
@@ -13,7 +12,7 @@ const attackStore = useAttackStore();
 const { logs, totalLogs, criticalCount, blockedCount, successCount } =
   storeToRefs(attackStore);
 
-const { startStream, stopStream } = useMockStream();
+const { startStream } = useMockStream();
 
 // 篩選狀態
 const filterLevel = ref<ThreatLevel | null>(null);
@@ -37,6 +36,27 @@ const filteredLogs = computed(() => {
 // 是否有篩選啟用
 const filterActive = computed(() => {
   return filterLevel.value !== null || filterStatus.value !== null;
+});
+
+// 篩選條件標籤
+const filterLabel = computed(() => {
+  if (filterLevel.value) {
+    const labels = {
+      CRITICAL: "嚴重威脅",
+      WARNING: "警告",
+      INFO: "資訊",
+    };
+    return labels[filterLevel.value];
+  }
+  if (filterStatus.value) {
+    const labels = {
+      SUCCESS: "成功攻擊",
+      BLOCKED: "已阻擋",
+      PENDING: "待處理",
+    };
+    return labels[filterStatus.value];
+  }
+  return "";
 });
 
 // 點擊卡片處理
@@ -77,6 +97,8 @@ onMounted(() => {
         :criticalCount="criticalCount"
         :successCount="successCount"
         :blockedCount="blockedCount"
+        :filterLevel="filterLevel"
+        :filterStatus="filterStatus"
         @filterByLevel="handleFilterByLevel"
         @filterByStatus="handleFilterByStatus"
         @clearFilters="clearFilters"
@@ -85,7 +107,7 @@ onMounted(() => {
       <!-- 篩選提示 -->
       <div
         v-if="filterLevel || filterStatus"
-        class="mb-4 p-3 bg-terminal-yellow/10 border border-terminal-yellow rounded"
+        class="my-4 p-3 bg-terminal-yellow/10 border border-terminal-yellow rounded"
       >
         <span class="text-terminal-yellow text-sm">
           🔍 篩選中:
@@ -102,31 +124,12 @@ onMounted(() => {
 
       <!-- 控制按鈕 -->
       <LogControls />
-      <!-- <div class="flex gap-4 my-8">
-        <button
-          @click="startStream"
-          class="px-4 py-2 bg-terminal-green text-terminal-bg rounded hover:opacity-80 transition-opacity"
-        >
-          Start Stream
-        </button>
-        <button
-          @click="stopStream"
-          class="px-4 py-2 bg-terminal-red text-terminal-bg rounded hover:opacity-80 transition-opacity"
-        >
-          Stop Stream
-        </button>
-        <button
-          @click="attackStore.clearLogs()"
-          class="px-4 py-2 bg-terminal-yellow text-terminal-bg rounded hover:opacity-80 transition-opacity"
-        >
-          Clear Logs
-        </button>
-      </div> -->
 
       <!-- 日誌終端 -->
       <LogTerminal
         :logs="filteredLogs.slice(-10).reverse()"
         :filterActive="filterActive"
+        :filterLabel="filterLabel"
       />
     </div>
   </div>
