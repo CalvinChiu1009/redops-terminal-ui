@@ -3,6 +3,7 @@ import { onMounted, ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useAttackStore } from "@/stores/attackStore";
 import { useMockStream } from "@/composables/useMockStream";
+import Header from "@/components/layout/Header.vue";
 import StatsGrid from "@/components/dashboard/StatsGrid.vue";
 import LogTerminal from "@/components/logs/LogTerminal.vue";
 import LogControls from "@/components/logs/LogControls.vue";
@@ -86,10 +87,8 @@ onMounted(() => {
     class="min-h-screen bg-terminal-bg text-terminal-green p-8 scanline-effect"
   >
     <div class="max-w-4xl mx-auto">
-      <!-- Title -->
-      <h1 class="text-4xl font-bold text-terminal-blue mb-8">
-        RedOps Command Center - Phase 1 Test
-      </h1>
+      <!-- Header -->
+      <Header />
 
       <!-- 統計卡片 - 改為 4 欄佈局 -->
       <StatsGrid
