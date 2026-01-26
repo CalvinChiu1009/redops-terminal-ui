@@ -38,18 +38,10 @@ body {
   min-height: 100vh;
 }
 
-/* 全域動畫效果 */
-* {
-  transition-property:
-    transform, opacity, background-color, border-color, color;
-  transition-duration: var(--transition-normal);
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 /* 按鈕 hover 效果 */
 button {
   cursor: pointer;
-  transition: all var(--transition-fast) ease-in-out;
+  transition: all 150ms ease-in-out;
 }
 
 button:hover {

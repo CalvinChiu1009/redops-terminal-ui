@@ -10,6 +10,11 @@ const props = withDefaults(defineProps<Props>(), {
   color: "green",
 });
 
+// 定義 emits
+defineEmits<{
+  click: [];
+}>();
+
 // 根據顏色決定樣式
 const colorClasses = {
   red: {
@@ -39,8 +44,9 @@ const currentColor = colorClasses[props.color];
 
 <template>
   <div
-    class="rounded p-4 border-2 transition-all duration-300 hover:scale-105"
+    class="rounded p-4 border-2 transition-all duration-300 hover:scale-105 cursor-pointer"
     :class="[currentColor.border, currentColor.bg]"
+    @click="$emit('click')"
   >
     <!-- 標題 -->
     <div class="text-sm text-terminal-yellow mb-2 font-mono">
@@ -48,7 +54,11 @@ const currentColor = colorClasses[props.color];
     </div>
 
     <!-- 數值 -->
-    <div class="text-4xl font-bold font-mono" :class="currentColor.text">
+    <div
+      :key="value"
+      class="text-4xl font-bold font-mono countup"
+      :class="currentColor.text"
+    >
       {{ value.toLocaleString() }}
     </div>
 
