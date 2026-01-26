@@ -27,6 +27,12 @@ const navItems = [
     icon: "⚙️",
     label: "Settings",
   },
+  {
+    name: "analytics",
+    path: "/analytics",
+    icon: "📈",
+    label: "Analytics",
+  },
 ];
 </script>
 
