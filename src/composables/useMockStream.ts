@@ -2,9 +2,11 @@ import { onUnmounted } from "vue";
 import { useAttackStore } from "@/stores/attackStore";
 import type { ThreatLevel, AttackStatus, AttackLog } from "@/types/attack";
 
+// ✅ 將 intervalId 移到外部，成為單例（所有元件共享）
+let intervalId: number | null = null;
+
 export const useMockStream = () => {
   const attackStore = useAttackStore();
-  let intervalId: number | null = null;
 
   // 生成隨機 IPv4 地址
   const generateRandomIP = (): string => {

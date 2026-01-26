@@ -3,7 +3,10 @@ import { onMounted, ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useAttackStore } from "@/stores/attackStore";
 import { useMockStream } from "@/composables/useMockStream";
-import StatCard from "@/components/dashboard/StatCard.vue";
+// import StatCard from "@/components/dashboard/StatCard.vue";
+import StatsGrid from "@/components/dashboard/StatsGrid.vue";
+import LogTerminal from "@/components/logs/LogTerminal.vue";
+import LogControls from "@/components/logs/LogControls.vue";
 import type { ThreatLevel, AttackStatus } from "@/types/attack";
 
 const attackStore = useAttackStore();
@@ -29,6 +32,11 @@ const filteredLogs = computed(() => {
   }
 
   return result;
+});
+
+// 是否有篩選啟用
+const filterActive = computed(() => {
+  return filterLevel.value !== null || filterStatus.value !== null;
 });
 
 // 點擊卡片處理
@@ -64,41 +72,15 @@ onMounted(() => {
       </h1>
 
       <!-- 統計卡片 - 改為 4 欄佈局 -->
-      <div class="grid grid-cols-4 gap-4 mb-8">
-        <StatCard
-          title="Total Logs"
-          :value="totalLogs"
-          color="green"
-          @click="clearFilters"
-        />
-
-        <StatCard
-          title="Critical Threats"
-          :value="criticalCount"
-          color="red"
-          icon="⚠️"
-          @click="handleFilterByLevel('CRITICAL')"
-          :class="{ 'ring-2 ring-terminal-red': filterLevel === 'CRITICAL' }"
-        />
-
-        <StatCard
-          title="Successful Attacks"
-          :value="successCount"
-          color="red"
-          icon="🚨"
-          @click="handleFilterByStatus('SUCCESS')"
-          :class="{ 'ring-2 ring-terminal-red': filterStatus === 'SUCCESS' }"
-        />
-
-        <StatCard
-          title="Blocked Attacks"
-          :value="blockedCount"
-          color="blue"
-          icon="🛡️"
-          @click="handleFilterByStatus('BLOCKED')"
-          :class="{ 'ring-2 ring-terminal-blue': filterStatus === 'BLOCKED' }"
-        />
-      </div>
+      <StatsGrid
+        :totalLogs="totalLogs"
+        :criticalCount="criticalCount"
+        :successCount="successCount"
+        :blockedCount="blockedCount"
+        @filterByLevel="handleFilterByLevel"
+        @filterByStatus="handleFilterByStatus"
+        @clearFilters="clearFilters"
+      />
 
       <!-- 篩選提示 -->
       <div
@@ -119,7 +101,8 @@ onMounted(() => {
       </div>
 
       <!-- 控制按鈕 -->
-      <div class="flex gap-4 mb-8">
+      <LogControls />
+      <!-- <div class="flex gap-4 my-8">
         <button
           @click="startStream"
           class="px-4 py-2 bg-terminal-green text-terminal-bg rounded hover:opacity-80 transition-opacity"
@@ -138,65 +121,13 @@ onMounted(() => {
         >
           Clear Logs
         </button>
-      </div>
+      </div> -->
 
-      <!-- 最新 10 筆日誌 -->
-      <div class="border border-terminal-green rounded p-4">
-        <h2 class="text-xl font-bold mb-4">
-          Latest Logs (Last 10)
-          <span
-            v-if="filterLevel || filterStatus"
-            class="text-sm text-terminal-yellow ml-2"
-          >
-            - 顯示 {{ filteredLogs.length }} 筆篩選結果
-          </span>
-        </h2>
-        <div class="space-y-2 font-mono text-sm">
-          <div
-            v-for="log in filteredLogs.slice(-10).reverse()"
-            :key="log.id"
-            class="p-2 border-l-4"
-            :class="{
-              'border-terminal-red bg-terminal-red/10':
-                log.level === 'CRITICAL',
-              'border-terminal-yellow bg-terminal-yellow/10':
-                log.level === 'WARNING',
-              'border-terminal-green bg-terminal-green/10':
-                log.level === 'INFO',
-            }"
-          >
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <span class="text-terminal-blue">{{ log.source_ip }}</span>
-                <span class="text-terminal-yellow mx-2">→</span>
-                <span class="text-terminal-green">:{{ log.target_port }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span
-                  class="px-2 py-1 text-xs rounded"
-                  :class="{
-                    'bg-terminal-red text-terminal-bg':
-                      log.level === 'CRITICAL',
-                    'bg-terminal-yellow text-terminal-bg':
-                      log.level === 'WARNING',
-                    'bg-terminal-green text-terminal-bg': log.level === 'INFO',
-                  }"
-                >
-                  {{ log.level }}
-                </span>
-                <span
-                  class="px-2 py-1 text-xs rounded bg-terminal-blue text-terminal-bg"
-                >
-                  {{ log.status }}
-                </span>
-              </div>
-            </div>
-            <div class="mt-1 text-terminal-green/80">
-              {{ log.payload }}
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- 日誌終端 -->
+      <LogTerminal
+        :logs="filteredLogs.slice(-10).reverse()"
+        :filterActive="filterActive"
+      />
     </div>
   </div>
 </template>
