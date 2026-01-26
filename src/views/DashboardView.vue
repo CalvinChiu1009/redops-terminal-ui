@@ -15,8 +15,6 @@ const attackStore = useAttackStore();
 const { logs, totalLogs, criticalCount, blockedCount, successCount } =
   storeToRefs(attackStore);
 
-const { startStream } = useMockStream();
-
 // 篩選狀態
 const filterLevel = ref<ThreatLevel | null>(null);
 const filterStatus = ref<AttackStatus | null>(null);
@@ -77,11 +75,6 @@ const clearFilters = () => {
   filterLevel.value = null;
   filterStatus.value = null;
 };
-
-// 元件掛載時啟動資料流
-onMounted(() => {
-  startStream();
-});
 </script>
 
 <template>

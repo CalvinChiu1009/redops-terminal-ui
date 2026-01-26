@@ -127,10 +127,10 @@ export const useMockStream = () => {
     }
   };
 
-  // 元件卸載時自動清理
-  onUnmounted(() => {
-    stopStream();
-  });
+  // 元件卸載時自動清理 - 移除此邏輯以支援跨頁面持續串流
+  // onUnmounted(() => {
+  //   stopStream();
+  // });
 
   return {
     startStream,

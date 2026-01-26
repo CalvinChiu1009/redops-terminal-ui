@@ -20,7 +20,7 @@ const { showParticles } = useUISettings();
 
     <!-- 右側 -->
     <main class="flex-1 p-4 md:p-8 overflow-y-auto">
-      <div class="max-w-7xl mx-auto">
+      <div class="h-full max-w-7xl mx-auto">
         <slot />
       </div>
     </main>
