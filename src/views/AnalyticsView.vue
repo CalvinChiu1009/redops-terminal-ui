@@ -1,16 +1,46 @@
 <script setup lang="ts">
+import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useAttackStore } from "@/stores/attackStore";
 import { useChartData } from "@/composables/useChartData";
 import ThreatTrendChart from "@/components/analytics/ThreatTrendChart.vue";
 import AttackDistribution from "@/components/analytics/AttackDistribution.vue";
+import type { AttackLog } from "@/types/attack";
 
 // 從 Pinia store 取得 logs
 const attackStore = useAttackStore();
 const { logs } = storeToRefs(attackStore);
 
-// 使用 useChartData 處理資料
-const { trendData, distributionData } = useChartData(logs.value);
+const timeWindow = ref(60);
+const timeOptions = [30, 60, 300];
+const isPaused = ref(false);
+const frozenLogs = ref<AttackLog[]>([]);
+
+// 當暫停時，使用凍結的資料；否則使用即時資料
+const activeLogs = computed(() =>
+  isPaused.value ? frozenLogs.value : logs.value,
+);
+
+// [FIXED] 使用 computed 讓圖表資料能響應變化
+const chartDataComputed = computed(() =>
+  useChartData(activeLogs.value, timeWindow.value),
+);
+
+// useChartData 回傳的 trendData 和 distributionData 已經是 computed
+// 所以這裡直接取出即可
+const trendData = computed(() => chartDataComputed.value.trendData.value);
+const distributionData = computed(
+  () => chartDataComputed.value.distributionData.value,
+);
+
+// 切換暫停/恢復
+const togglePause = () => {
+  if (!isPaused.value) {
+    // 暫停：儲存當前 logs
+    frozenLogs.value = [...logs.value];
+  }
+  isPaused.value = !isPaused.value;
+};
 </script>
 
 <template>
@@ -21,6 +51,19 @@ const { trendData, distributionData } = useChartData(logs.value);
     >
       <h2 class="text-xl font-bold">📈 Threat Analytics</h2>
       <div class="text-sm opacity-70">Live Threat Visualization</div>
+
+      <!-- [NEW] 暫停按鈕 -->
+      <button
+        @click="togglePause"
+        class="px-3 py-1 text-xs font-mono rounded border transition-all duration-200"
+        :class="
+          isPaused
+            ? 'bg-terminal-green text-black border-terminal-green'
+            : 'border-terminal-green/50 text-terminal-green hover:border-terminal-green'
+        "
+      >
+        {{ isPaused ? "▶ Resume" : "⏸ Pause" }}
+      </button>
     </div>
 
     <!-- 圖表區域 -->
@@ -38,6 +81,21 @@ const { trendData, distributionData } = useChartData(logs.value);
               class="w-2 h-2 bg-terminal-green rounded-full animate-pulse"
             ></span>
           </h3>
+          <div class="flex gap-2 mb-3">
+            <button
+              v-for="option in timeOptions"
+              :key="option"
+              @click="timeWindow = option"
+              :class="
+                timeWindow === option
+                  ? 'bg-terminal-green text-black border-terminal-green'
+                  : 'border-terminal-green/50 text-terminal-green hover:border-terminal-green'
+              "
+              class="px-3 py-1 text-xs font-mono rounded border transition-all duration-200"
+            >
+              {{ option < 60 ? `${option}s` : `${option / 60}m` }}
+            </button>
+          </div>
           <div
             v-if="logs.length < 10"
             class="h-64 flex items-center justify-center text-terminal-green/50"

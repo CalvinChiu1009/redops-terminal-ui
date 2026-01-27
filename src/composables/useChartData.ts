@@ -3,12 +3,15 @@ import { computed } from "vue";
 import type { AttackLog } from "@/types/attack";
 import type { ChartData } from "chart.js";
 
-export function useChartData(logs: AttackLog[]) {
+export function useChartData(
+  logs: AttackLog[],
+  timeWindowSeconds: number = 60,
+) {
   // --- 1. 趨勢圖資料 (Line Chart) ---
   const trendData = computed<ChartData<"line">>(() => {
     // 找出目前時間 (以 5秒 為一個區間)
     const now = Date.now();
-    const timeWindow = 60 * 1000; // 顯示最近 60 秒
+    const timeWindow = timeWindowSeconds * 1000; // 顯示最近 60 秒
     const interval = 5 * 1000; // 每 5 秒一個點
 
     // 初始化 buckets (最近 12 個 5秒區間)
