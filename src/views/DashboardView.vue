@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useAttackStore } from "@/stores/attackStore";
-import { useMockStream } from "@/composables/useMockStream";
 // import AppLayout from "@/components/layout/AppLayout.vue";
 import Header from "@/components/layout/Header.vue";
 import Filter from "@/components/dashboard/Filter.vue";

@@ -72,16 +72,21 @@ const animate = () => {
   // 為了效能，雙重迴圈要注意數量
   for (let i = 0; i < particles.length; i++) {
     for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
+      const particleA = particles[i];
+      const particleB = particles[j];
+
+      if (!particleA || !particleB) continue;
+
+      const dx = particleA.x - particleB.x;
+      const dy = particleA.y - particleB.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < connectionDistance) {
         ctx.beginPath();
         ctx.strokeStyle = `rgba(0, 255, 65, ${0.2 * (1 - distance / connectionDistance)})`;
         ctx.lineWidth = 1;
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.moveTo(particleA.x, particleA.y);
+        ctx.lineTo(particleB.x, particleB.y);
         ctx.stroke();
       }
     }

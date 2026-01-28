@@ -9,11 +9,11 @@ interface Props {
   log: AttackLog;
 }
 
+const props = defineProps<Props>();
+
 // Safe rendering composable
 const { safeMode, isXSSPayload, renderPayload, getXSSIndicatorClass } =
   useSafeRender();
-
-const props = defineProps<Props>();
 
 // 格式化時間戳記
 const formattedTime = computed(() => {

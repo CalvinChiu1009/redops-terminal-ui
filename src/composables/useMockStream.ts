@@ -1,4 +1,3 @@
-import { onUnmounted } from "vue";
 import { useAttackStore } from "@/stores/attackStore";
 import type { ThreatLevel, AttackStatus, AttackLog } from "@/types/attack";
 

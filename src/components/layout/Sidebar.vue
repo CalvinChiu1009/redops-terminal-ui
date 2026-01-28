@@ -1,6 +1,5 @@
 <!-- src/components/layout/Sidebar.vue -->
 <script setup lang="ts">
-import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useUISettings } from "@/composables/useUISettings";
 
