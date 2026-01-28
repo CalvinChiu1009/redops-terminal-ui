@@ -5,6 +5,9 @@ import type { AttackLog } from "../types/attack"; // 雖然 AttackLog 是一個 
 export const useAttackStore = defineStore("attack", () => {
   // State
   const logs = ref<AttackLog[]>([]);
+  const safeMode = ref<boolean>(true);
+  // const safeMode: Ref<boolean> = ref(true);
+  // TypeScript 會自動推斷 ref(true) 的型別為 Ref<boolean>，所以您寫 const safeMode = ref(true) 就已經有型別了。
 
   // Getters
   const totalLogs = computed(() => logs.value.length);
@@ -42,8 +45,13 @@ export const useAttackStore = defineStore("attack", () => {
     logs.value = [];
   };
 
+  const toggleSafeMode = () => {
+    safeMode.value = !safeMode.value;
+  };
+
   return {
     logs,
+    safeMode,
     totalLogs,
     criticalCount,
     warningCount,
@@ -53,5 +61,6 @@ export const useAttackStore = defineStore("attack", () => {
     pendingCount,
     addLog,
     clearLogs,
+    toggleSafeMode,
   };
 });
