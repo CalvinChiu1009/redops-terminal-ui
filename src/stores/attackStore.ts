@@ -8,6 +8,7 @@ export const useAttackStore = defineStore("attack", () => {
   const safeMode = ref<boolean>(true);
   // const safeMode: Ref<boolean> = ref(true);
   // TypeScript 會自動推斷 ref(true) 的型別為 Ref<boolean>，所以您寫 const safeMode = ref(true) 就已經有型別了。
+  const autoScroll = ref<boolean>(true);
 
   // Getters
   const totalLogs = computed(() => logs.value.length);
@@ -62,5 +63,6 @@ export const useAttackStore = defineStore("attack", () => {
     addLog,
     clearLogs,
     toggleSafeMode,
+    autoScroll,
   };
 });

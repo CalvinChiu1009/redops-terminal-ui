@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from "vue";
+import { watch, nextTick } from "vue";
 import { useVirtualList } from "@vueuse/core";
 import { useAttackStore } from "@/stores/attackStore";
 import { storeToRefs } from "pinia";
 import { format } from "date-fns";
 
 const attackStore = useAttackStore();
-const autoScroll = ref(true);
-const { logs } = storeToRefs(attackStore);
+const { logs, autoScroll } = storeToRefs(attackStore);
 
 // 使用 Virtual List
 // 必須解構出 scrollTo 才能使用
