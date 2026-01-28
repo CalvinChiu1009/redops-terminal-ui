@@ -2,17 +2,33 @@
 import { computed } from "vue";
 import { format } from "date-fns";
 import type { AttackLog } from "@/types/attack";
+import { useSafeRender } from "@/composables/useSafeRender";
 
 // Props 使用 AttackLog 型別
 interface Props {
   log: AttackLog;
 }
 
+// Safe rendering composable
+const { safeMode, isXSSPayload, renderPayload, getXSSIndicatorClass } =
+  useSafeRender();
+
 const props = defineProps<Props>();
 
 // 格式化時間戳記
 const formattedTime = computed(() => {
   return format(props.log.timestamp, "yyyy-MM-dd HH:mm:ss");
+});
+
+// Safe payload rendering
+const safePayload = computed(() => {
+  return renderPayload(props.log.payload);
+});
+const isXSS = computed(() => {
+  return isXSSPayload(props.log.payload);
+});
+const xssClass = computed(() => {
+  return getXSSIndicatorClass(props.log.payload);
 });
 
 // 根據 level 決定樣式
@@ -73,13 +89,70 @@ const levelBadge = computed(() => {
     <!-- 第二行：Payload -->
     <div class="text-terminal-green">
       <span class="opacity-50">Payload:</span>
-      <span class="ml-2">{{ log.payload }}</span>
+      <!-- <span class="ml-2">{{ log.payload }}</span> -->
+
+      <!-- XSS Warning Badge -->
+      <span
+        v-if="isXSS"
+        class="ml-2 px-2 py-0.5 text-xs bg-red-500/20 text-red-400 border border-red-500/50 rounded animate-pulse"
+        title="XSS Pattern Detected"
+      >
+        ⚠️ XSS
+      </span>
+
+      <!-- Safe Mod ON: Sanitize payload -->
+      <span v-if="safeMode" class="ml-2" :class="{ 'text-red-400': isXSS }">
+        {{ safePayload }}
+      </span>
+
+      <!-- Safe Mode OFF: Raw payload in <code> tag -->
+      <code
+        v-else
+        class="ml-2 px-2 py-1 bg-black/30 rounded text-yellow-400 border border-yellow-500/30"
+        :class="xssClass"
+      >
+        {{ safePayload }}
+      </code>
     </div>
 
     <!-- 第三行：Status -->
-    <div class="mt-1 text-xs">
+    <!-- <div class="mt-1 text-xs">
       <span class="opacity-50">Status:</span>
       <span :class="statusColor" class="ml-2 font-bold">{{ log.status }}</span>
+    </div> -->
+    <div class="mt-1 text-xs flex justify-between items-center">
+      <div>
+        <span class="opacity-50">Status:</span>
+        <span :class="statusColor" class="ml-2 font-bold">
+          {{ log.status }}
+        </span>
+      </div>
+
+      <!-- Safe Mode Indicator -->
+      <span
+        v-if="!safeMode"
+        class="text-yellow-400 opacity-70"
+        title="Safe Mode is OFF - Raw payloads are displayed"
+      >
+        🔓 RAW MODE
+      </span>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* XSS detected animation */
+.xss-detected {
+  animation: xss-glow 2s ease-in-out infinite;
+}
+
+@keyframes xss-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+  }
+}
+</style>
