@@ -20,6 +20,15 @@ const chartOptions: ChartOptions<"doughnut"> = {
         },
       },
     },
+    tooltip: {
+      backgroundColor: "rgba(0, 0, 0, 0.9)",
+      titleColor: "#00ff41",
+      bodyColor: "#00ff41",
+      borderColor: "#00ff41",
+      borderWidth: 1,
+      padding: 12,
+      displayColors: true,
+    },
   },
 };
 </script>

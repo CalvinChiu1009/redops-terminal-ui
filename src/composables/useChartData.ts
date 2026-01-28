@@ -98,8 +98,18 @@ export function useChartData(
       else pending++;
     });
 
+    // 計算總數和百分比
+    const total = blocked + success + pending;
+    const blockedPct = total > 0 ? ((blocked / total) * 100).toFixed(1) : "0.0";
+    const successPct = total > 0 ? ((success / total) * 100).toFixed(1) : "0.0";
+    const pendingPct = total > 0 ? ((pending / total) * 100).toFixed(1) : "0.0";
+
     return {
-      labels: ["Blocked", "Success", "Pending"],
+      labels: [
+        `BLOCKED: ${blocked} (${blockedPct}%)`,
+        `SUCCESS: ${success} (${successPct}%)`,
+        `PENDING: ${pending} (${pendingPct}%)`,
+      ],
       datasets: [
         {
           data: [blocked, success, pending],
