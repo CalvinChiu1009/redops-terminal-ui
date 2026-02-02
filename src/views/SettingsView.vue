@@ -168,7 +168,7 @@ function handleClearLogs() {
     </div>
 
     <!-- Performance Settings Section (Placeholder for Phase 5B) -->
-    <div class="mb-8">
+    <!-- <div class="mb-8">
       <h2
         class="text-xl font-semibold text-terminal-blue mb-4 border-b border-terminal-blue/30 pb-2"
       >
@@ -188,7 +188,7 @@ function handleClearLogs() {
           🚧 Coming in Phase 5B: Performance Monitoring
         </p>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
