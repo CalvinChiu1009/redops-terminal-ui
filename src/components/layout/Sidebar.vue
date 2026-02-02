@@ -21,16 +21,16 @@ const navItems = [
     label: "Logs",
   },
   {
-    name: "settings",
-    path: "/settings",
-    icon: "⚙️",
-    label: "Settings",
-  },
-  {
     name: "analytics",
     path: "/analytics",
     icon: "📈",
     label: "Analytics",
+  },
+  {
+    name: "settings",
+    path: "/settings",
+    icon: "⚙️",
+    label: "Settings",
   },
 ];
 </script>
