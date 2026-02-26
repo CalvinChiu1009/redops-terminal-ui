@@ -4,6 +4,8 @@
 
 > A cybersecurity-themed attack log monitoring dashboard built with Vue 3, TypeScript, and Tailwind CSS.
 
+🔗 **Live Demo**: [redops-terminal-ui.vercel.app](https://redops-terminal-ui.vercel.app/)
+
 ## 📋 Project Overview
 
 RedOps Command Center is a real-time attack log monitoring system designed to showcase modern Vue 3 development practices, state management, and security-aware frontend engineering. This project demonstrates proficiency in building performant, type-safe, and visually engaging web applications.
